@@ -19,7 +19,7 @@ static NSDictionary* NSDictionaryWithXCFileReferenceTypes()
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^
     {
-        dictionary = @{
+        dictionary = [@{
             @"sourcecode.c.h"        : @(SourceCodeHeader),
             @"sourcecode.c.objc"     : @(SourceCodeObjC),
             @"wrapper.framework"     : @(Framework),
@@ -46,7 +46,7 @@ static NSDictionary* NSDictionaryWithXCFileReferenceTypes()
             @"wrapper.xcconfig"         : @(XCConfig),
             @"wrapper.xcdatamodel": @(XCDataModel),
             @"file.strings": @(LocalizableStrings)
-        };
+        } retain];
     });
 
     return dictionary;

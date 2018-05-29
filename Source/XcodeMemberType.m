@@ -30,37 +30,40 @@ static NSString* const kXCBuildConfiguration = @"XCBuildConfiguration";
 static NSString* const kXCConfigurationList = @"XCConfigurationList";
 static NSString* const kXCVersionGroup = @"XCVersionGroup";
 
+
 static NSDictionary* DictionaryWithProjectNodeTypesAsStrings() {
     // This is the most vital operation on adding 500+ files
     // So, we caching this dictionary
     static NSDictionary* _projectNodeTypesAsStrings;
+
     if (_projectNodeTypesAsStrings) {
         return _projectNodeTypesAsStrings;
     }
-    
+
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        _projectNodeTypesAsStrings = @{
-                                       kPBXNilType              : @(PBXNilType),
-                                       kPBXBuildFile            : @(PBXBuildFileType),
-                                       kPBXContainerItemProxy   : @(PBXContainerItemProxyType),
-                                       kPBXCopyFilesBuildPhase  : @(PBXCopyFilesBuildPhaseType),
-                                       kPBXFileReference        : @(PBXFileReferenceType),
-                                       kPBXFrameworksBuildPhase : @(PBXFrameworksBuildPhaseType),
-                                       kPBXGroup                : @(PBXGroupType),
-                                       kPBXNativeTarget         : @(PBXNativeTargetType),
-                                       kPBXProject              : @(PBXProjectType),
-                                       kPBXReferenceProxy       : @(PBXReferenceProxyType),
-                                       kPBXResourcesBuildPhase  : @(PBXResourcesBuildPhaseType),
-                                       kPBXSourcesBuildPhase    : @(PBXSourcesBuildPhaseType),
-                                       kPBXTargetDependency     : @(PBXTargetDependencyType),
-                                       kPBXVariantGroup         : @(PBXVariantGroupType),
-                                       kXCBuildConfiguration    : @(XCBuildConfigurationType),
-                                       kXCConfigurationList     : @(XCConfigurationListType),
-                                       kPBXShellScriptBuildPhase : @(PBXShellScriptBuildPhase),
-                                       kXCVersionGroup          : @(XCVersionGroupType)
-                                       };
+        _projectNodeTypesAsStrings = [@{
+                kPBXNilType              : @(PBXNilType),
+                kPBXBuildFile            : @(PBXBuildFileType),
+                kPBXContainerItemProxy   : @(PBXContainerItemProxyType),
+                kPBXCopyFilesBuildPhase  : @(PBXCopyFilesBuildPhaseType),
+                kPBXFileReference        : @(PBXFileReferenceType),
+                kPBXFrameworksBuildPhase : @(PBXFrameworksBuildPhaseType),
+                kPBXGroup                : @(PBXGroupType),
+                kPBXNativeTarget         : @(PBXNativeTargetType),
+                kPBXProject              : @(PBXProjectType),
+                kPBXReferenceProxy       : @(PBXReferenceProxyType),
+                kPBXResourcesBuildPhase  : @(PBXResourcesBuildPhaseType),
+                kPBXSourcesBuildPhase    : @(PBXSourcesBuildPhaseType),
+                kPBXTargetDependency     : @(PBXTargetDependencyType),
+                kPBXVariantGroup         : @(PBXVariantGroupType),
+                kXCBuildConfiguration    : @(XCBuildConfigurationType),
+                kXCConfigurationList     : @(XCConfigurationListType),
+                kPBXShellScriptBuildPhase : @(PBXShellScriptBuildPhase),
+                kXCVersionGroup          : @(XCVersionGroupType)
+        } retain];
     });
+
     return _projectNodeTypesAsStrings;
 }
 

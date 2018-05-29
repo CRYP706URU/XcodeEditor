@@ -24,10 +24,10 @@ static NSDictionary* DictionaryWithProjectSourceTreeTypesAsStrings() {
     
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        _projectNodeTypesAsStrings = @{
+        _projectNodeTypesAsStrings = [@{
                                        kPBXSourceTreeSKRoot              : @(SourceTreeSDKRoot),
                                        kPBXSourceTreeGroup            : @(SourceTreeGroup),
-                                       };
+                                       } retain];
     });
     return _projectNodeTypesAsStrings;
 }
