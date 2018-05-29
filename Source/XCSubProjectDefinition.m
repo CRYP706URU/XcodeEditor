@@ -141,7 +141,7 @@
             }
         }
         // insert "../" for each remaining path component in project's xcodeproj path
-        for (NSInteger index2 = 0; index2 < ([projectPathComponents count] - index1); index2++) {
+        for (NSInteger index2 = 0; index2 < ([projectPathComponents count] - index1 - 1); index2++) {
             convertedPath = [convertedPath stringByAppendingString:@"../"];
         }
         // tack on the unique part of the object's path
