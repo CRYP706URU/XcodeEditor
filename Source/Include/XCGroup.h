@@ -194,6 +194,9 @@
 */
 - (void)addSubProject:(XCSubProjectDefinition*)projectDefinition toTargets:(NSArray<XCTarget*>*)targets;
 
+- (void)addSubProject:(XCSubProjectDefinition*)projectDefinition withBuildProducts:(NSArray<NSString*>*)buildProducts
+            toTargets:(NSArray<XCTarget*>*)targets;
+
 - (void)removeSubProject:(XCSubProjectDefinition*)projectDefinition;
 
 - (void)removeSubProject:(XCSubProjectDefinition*)projectDefinition fromTargets:(NSArray<XCTarget*>*)targets;

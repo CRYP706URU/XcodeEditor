@@ -409,12 +409,51 @@
 
     // add subproject's build products to targets (does not add the subproject's test bundle)
     NSArray *buildProductFiles = [_project buildProductsForTargets:[projectDefinition projectKey]];
+
     for (XCSourceFile *file in buildProductFiles) {
         [self addSourceFile:file toTargets:targets];
     }
     // add main target of subproject as target dependency to main target of project
     [_project addAsTargetDependency:projectDefinition toTargets:targets];
 }
+
+// adds an xcodeproj as a subproject of the current project, and also adds all build products except for test bundle(s)
+// to targets.
+- (void)addSubProject:(XCSubProjectDefinition *)projectDefinition withBuildProducts:(NSArray *)buildProducts toTargets:(NSArray *)targets
+{
+    [self addSubProject:projectDefinition];
+
+    NSArray *buildProductFiles = [_project buildProductsForTargets:[projectDefinition projectKey]];
+
+    for (XCSourceFile *file in buildProductFiles) {
+        if ([buildProducts containsObject:file.name]) // TODO prevent duplicate entries
+            [self addSourceFile:file toTargets:targets];
+    }
+    // add main target of subproject as target dependency to main target of project
+    [_project addAsTargetDependency:projectDefinition toTargets:targets];
+}
+
+/*
+// adds an xcodeproj as a subproject of the current project, with a rule as to what build products to add
+- (void)addSubProject:(XCSubProjectDefinition *)projectDefinition toTargets:(NSArray *)targets
+        withProductsMatching:(NSRegularExpression *) productsRule
+{
+    [self addSubProject:projectDefinition];
+
+    // add subproject's build products to targets (does not add the subproject's test bundle)
+    NSArray *buildProductFiles = [_project buildProductsForTargets:[projectDefinition projectKey]];
+
+    for (XCSourceFile *file in buildProductFiles) {
+        NSUInteger numberOfMatches = [productsRule numberOfMatchesInString:[file name]
+                                                            options:0
+                                                              range:NSMakeRange(0, [[file name] length])];
+        if (numberOfMatches > 0)
+            [self addSourceFile:file toTargets:targets];
+    }
+    // add main target of subproject as target dependency to main target of project
+    [_project addAsTargetDependency:projectDefinition toTargets:targets];
+}
+ */
 
 // removes an xcodeproj from the current project.
 - (void)removeSubProject:(XCSubProjectDefinition *)projectDefinition
@@ -805,8 +844,12 @@
     NSMutableArray *children = [NSMutableArray array];
     NSString *uniquer = @"";
     for (NSString *productName in [xcodeprojDefinition buildProductNames]) {
-        [children addObject:[_project referenceProxyKeyForName:productName]];
-        uniquer = [uniquer stringByAppendingString:productName];
+        NSString* refKey = [_project referenceProxyKeyForName:productName];
+        if (refKey != nil)
+        {
+            [children addObject:[_project referenceProxyKeyForName:productName]];
+            uniquer = [uniquer stringByAppendingString:productName];
+        }
     }
     NSString *productKey = [[XCKeyBuilder forItemNamed:[NSString stringWithFormat:@"%@-Products", uniquer]] build];
     XCGroup *productsGroup =
@@ -819,8 +862,17 @@
 // then adds it to the PBXProject object
 - (void)addProductsGroupToProject:(XCSubProjectDefinition *)xcodeprojDefinition
 {
-    NSString *productKey = [self makeProductsGroup:xcodeprojDefinition];
-
+    NSString *productKey;
+    @try
+    {
+       productKey = [self makeProductsGroup:xcodeprojDefinition];
+    }
+    @catch (NSException* e)
+    {
+        NSLog (e.reason);
+        NSLog (e.callStackSymbols.description);
+        return;
+    }
     NSMutableDictionary *PBXProjectDict = [_project PBXProjectDict];
     NSMutableArray *projectReferences = [PBXProjectDict valueForKey:@"projectReferences"];
 

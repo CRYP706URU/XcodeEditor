@@ -33,6 +33,7 @@
     [[self objects] enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSDictionary *obj, BOOL *stop) {
         if ([[obj valueForKey:@"isa"] xce_hasReferenceProxyType]) {
             NSString *candidate = [obj valueForKey:@"path"];
+            NSLog (candidate);
             if ([candidate isEqualToString:name]) {
                 result = key;
                 *stop = YES;

@@ -85,7 +85,9 @@
             NSArray *children = [products valueForKey:@"children"];
             for (NSString *childKey in children) {
                 NSDictionary *child = [objects valueForKey:childKey];
-                [results addObject:[child valueForKey:@"path"]];
+                NSString *path = [child valueForKey:@"path"];
+                if (path != nil)
+                    [results addObject:[child valueForKey:@"path"]];
             }
         }
     }];
